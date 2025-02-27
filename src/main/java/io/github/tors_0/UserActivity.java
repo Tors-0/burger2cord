@@ -4,7 +4,6 @@ import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
 
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,33 +33,45 @@ public class UserActivity {
             }
         }, "RPC-Callback-Handler").start();
 
-        t.scheduleAtFixedRate(new TimerTask() {
+        t.scheduleAtFixedRate(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        updatePresence();
+                    }
+                },
+                15_000,
+                15_000);
 
-            @Override
-            public void run() {
-                updatePresence();
-            }
-        }, 5000, 5000);
+        t.scheduleAtFixedRate(
+                new TimerTask() {
+                    @Override
+                    public void run() {try {
+                        Main.currentSong = Parser.parse();
+                    } catch (Exception e) {
+                        System.err.println(e.toString());
+                    }
+                    }
+                },
+                5_000 + (Main.MAIN.getTimeDelaySeconds() * 1_000L),
+                5_000);
     }
 
     private void basicPresence() {
-
         DiscordRichPresence presence = new DiscordRichPresence();
-        presence.startTimestamp = start_time; // epoch second
-        presence.details = "Unknown Song";
-        presence.state = "Unknown Artist";
-        presence.instance = 1;
-        lib.Discord_UpdatePresence(presence);
 
+        // get time diff from start to now and convert to minutes
+        long x = (long) ( ( Main.MAIN.getTimeDelaySeconds() - ( ( System.currentTimeMillis() - Main.MAIN.getStartTimeMillis() ) / 1000d ) ) / 60d );
+
+        presence.startTimestamp = start_time; // epoch second
+        presence.details = "LIVE in " + x + " minutes on 88.1 FM";
+        presence.state = "Tune in now!";
+        presence.instance = 1;
+
+        lib.Discord_UpdatePresence(presence);
     }
 
     private void updatePresence() {
-        try {
-            Main.currentSong = Parser.parse();
-        } catch (Exception e) {
-            System.err.println(e.toString());
-        }
-
         if (Main.currentSong != null) {
             times++;
 

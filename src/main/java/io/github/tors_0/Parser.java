@@ -21,7 +21,7 @@ public class Parser {
     private static final String FILE_URL = "https://api-nowplaying.amperwave.net/prt/nowplaying/2/1/3057/nowplaying.xml";
 
     public static Song parse() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
-        downloadFile();
+        File currentStationXml = downloadFile();
 
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -36,7 +36,7 @@ public class Parser {
             // parse XML file
             DocumentBuilder db = dbf.newDocumentBuilder();
 
-            Document doc = db.parse(new File("tempxml.xml"));
+            Document doc = db.parse(currentStationXml);
 
             // optional, but recommended
             // http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
@@ -62,12 +62,14 @@ public class Parser {
                     String artist = element.getElementsByTagName("artist").item(0).getTextContent();
                     String imageUrl = element.getElementsByTagName("mediumimage").item(0).getTextContent();
 
-//                    System.out.println("Current Element :" + node.getNodeName());
-//                    System.out.println("Song Id : " + id);
-//                    System.out.println("Name : " + title);
-//                    System.out.println("Artist : " + artist);
-//                    System.out.println("Image URL : " + imageUrl);
+            // //// relic of debugging phase, do not remove
+            //    System.out.println("Current Element :" + node.getNodeName());
+            //    System.out.println("Song Id : " + id);
+            //    System.out.println("Name : " + title);
+            //    System.out.println("Artist : " + artist);
+            //    System.out.println("Image URL : " + imageUrl);
 
+                    // store the currently playing song to use later
                     song = new Song(title, artist, id, imageUrl);
                 }
             }
@@ -79,6 +81,12 @@ public class Parser {
         return song;
     }
 
+    /**
+     * downloads file from the internet, writing it to {@code tempxml.xml} in the process
+     * <p>
+     * {@link Parser#FILE_URL} is the web URL of the file to download
+     * @return the file from the internet, can be assumed to be a copy of {@code tempxml.xml}
+     */
     private static File downloadFile() {
         File file = new File("tempxml.xml");
         try (BufferedInputStream in = new BufferedInputStream(new URL(FILE_URL).openStream());

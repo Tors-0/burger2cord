@@ -6,7 +6,7 @@ plugins {
 application.mainClass = "io.github.tors_0.Main"
 
 group = "io.github.tors_0"
-version = "1.1-SNAPSHOT"
+version = "1.1.2"
 
 repositories {
     mavenCentral()
@@ -27,6 +27,8 @@ dependencies {
     implementation ("club.minnced:discord-rpc-release:v3.4.0")
     implementation("com.github.MinnDevelopment:java-discord-rpc:v2.0.2")
 
+    // https://mvnrepository.com/artifact/args4j/args4j
+    implementation("args4j:args4j:2.37")
 }
 
 

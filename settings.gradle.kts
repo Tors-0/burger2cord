@@ -1,2 +1,2 @@
-rootProject.name = "web2cord"
+rootProject.name = "burger2cord"
 
