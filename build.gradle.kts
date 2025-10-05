@@ -22,9 +22,7 @@ repositories {
 
 }
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    implementation ("club.minnced:discord-rpc-release:v3.4.0")
+    implementation("club.minnced:discord-rpc-release:3.3.0")
     implementation("com.github.MinnDevelopment:java-discord-rpc:v2.0.2")
 
     // https://mvnrepository.com/artifact/args4j/args4j

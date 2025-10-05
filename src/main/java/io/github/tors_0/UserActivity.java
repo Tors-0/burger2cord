@@ -63,6 +63,8 @@ public class UserActivity {
         // get time diff from start to now and convert to minutes
         long x = (long) ( ( Main.MAIN.getTimeDelaySeconds() - ( ( System.currentTimeMillis() - Main.MAIN.getStartTimeMillis() ) / 1000d ) ) / 60d );
 
+        presence.smallImageKey = "881";
+        presence.largeImageKey = "burg";
         presence.startTimestamp = start_time; // epoch second
         presence.details = "LIVE in " + x + " minutes on 88.1 FM";
         presence.state = "Tune in now!";
@@ -81,14 +83,15 @@ public class UserActivity {
             presence.instance = 1;
 
             if (!Main.currentSong.getArtist().equals("Production")) {
-                presence.details = Main.currentSong.getTitle().isBlank() ? "Unknown Song" : Main.currentSong.getTitle();
-                presence.state = "by " + (Main.currentSong.getArtist().isBlank() ? "Unknown Artist" : Main.currentSong.getArtist());
+                presence.details = Main.MAIN.getShowName();
+                presence.state = (Main.currentSong.getTitle().isBlank() ? "Unknown Song" : Main.currentSong.getTitle()) + " || " + (Main.currentSong.getArtist().isBlank() ? "Unknown Artist" : Main.currentSong.getArtist());
             } else {
                 presence.details = "Sponsor Break";
                 presence.state = "88.1 FM KCWU";
             }
 
-            presence.largeImageKey = "881-dark";
+            presence.smallImageKey = "881";
+            presence.largeImageKey = Main.MAIN.getShow();
 
             lib.Discord_UpdatePresence(presence);
 

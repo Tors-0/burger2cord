@@ -16,6 +16,10 @@ public class Main {
     @Option(name="-t",usage = "seconds until the show goes live (advertise beforehand!)", required = false)
     private int timeDelay = 0; // default value
 
+
+    @Option(name="-show", usage="which show is running (burg/pick/hobby)", required = false)
+    private String show = "burg"; // default value
+
     @Argument
     private List<String> arguments = new ArrayList<String>();
 
@@ -62,6 +66,9 @@ public class Main {
 
         if( timeDelay>=0 )
             System.out.println("-t was "+timeDelay);
+        if (show != null) {
+            System.out.println("-show was " + show);
+        }
 
         // access non-option arguments
         System.out.println("other arguments are:");
@@ -71,6 +78,9 @@ public class Main {
 
     public Main() {
         startTime = System.currentTimeMillis();
+        if (!show.equals("burg") && !show.equals("hobby") && !show.equals("pick")) {
+            show = "burg";
+        }
     }
 
     public long getStartTimeMillis() {
@@ -79,5 +89,17 @@ public class Main {
 
     public int getTimeDelaySeconds() {
         return timeDelay;
+    }
+
+    public String getShow() {
+        return show;
+    }
+    public String getShowName() {
+        return switch (show) {
+            case "burg"-> "The Burg";
+            case "hobby"-> "Hobby Heights";
+            case "pick"-> "The DJ's Pick";
+            default -> throw new IllegalStateException("Unexpected value: " + show);
+        };
     }
 }
